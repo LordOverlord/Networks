@@ -14,16 +14,14 @@ if %errorLevel% NEQ 0 ( goto ErrorL )
  
 :Reset
 echo Reiniciando
-ping www.google.com >> %logfile%
-timeout /t 10
 wmic path win32_networkadapter where NetConnectionId="Ethernet" call disable > %logfile%
-timeout /t 10
+timeout /t 2
 wmic path win32_networkadapter where NetConnectionId="Ethernet" call enable >> %logfile%
 echo """"""""""""""""""""""""
 echo "" Reinicio terminado ""
 echo """"""""""""""""""""""""
 echo Reinicio terminado %mydate% >> %logfile%
-timeout /t 5
+pause
 goto EOF
 
 :ErrorL
@@ -34,7 +32,7 @@ echo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 echo !!!!!  No se tienen permisos, favor de ejecutar como administrador !!!!!!!!
 echo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 echo .
-timeout /5
+pause
 exit
 
 :EOF
