@@ -6,18 +6,17 @@ goto checkAdmin
 :checkAdmin
 echo Se requieren permisos administrativos, revisando....
 net session >nul 2>&1 
-if %errorLevel% EQU 0 ( goto MAIN )
-if %errorLevel% NEQ 0 ( goto ErrorL )
+if %errorLevel% NEQ 0 ( goto MAIN )
+if %errorLevel% EQU 0 ( goto ErrorL )
  
 :MAIN
-REM Disable the ethernet interface, replace "ethernet" with the name of the adapter
+echo Reiniciando
 wmic path win32_networkadapter where NetConnectionId="Ethernet" call disable > %logfile%
-REM Delay time, replace with the time needed
 timeout /t 10
-REM Enable the ethernet interface, replace "ethernet" with the name of the adapter
 wmic path win32_networkadapter where NetConnectionId="Ethernet" call enable >> %logfile%
 timeout /t 10
 ping www.google.com >> %logfile%
+pause
 goto EOF
 
 :ErrorL
