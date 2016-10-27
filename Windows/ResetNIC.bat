@@ -1,36 +1,45 @@
-@echo off 
-FOR /f %%a IN ('WMIC OS GET LocalDateTime ^| FIND "."') DO SET DTS=%%a
-SET mydate=%DTS:~0,4%-%DTS:~4,2%-%DTS:~6,2%_%DTS:~8,2%-%DTS:~10,2%-%DTS:~12,2%
-set logfile=log_%mydate%.log
+@echo off
 goto checkAdmin 
 
 :checkAdmin
-echo ==========================================================
-echo == Se requieren permisos administrativos, revisando.... ==
-echo ==========================================================
 net session >nul 2>&1 
 if %errorLevel% EQU 0 ( goto Reset )
 if %errorLevel% NEQ 0 ( goto ErrorL )
- 
+
 :Reset
-echo Reiniciando
-wmic path win32_networkadapter where NetConnectionId="Ethernet" call disable > %logfile%
+mkdir C:\LogRNIC >null
+cls
+echo ==========================================================
+echo == Se requieren permisos administrativos, revisando.... ==
+echo ==========================================================
+echo .
+echo """"""""""""""""""""""""
+echo "" Iniciando Reinicio ""
+echo """"""""""""""""""""""""
+wmic path win32_networkadapter where NetConnectionId="Ethernet" call disable >null
 timeout /t 2
-wmic path win32_networkadapter where NetConnectionId="Ethernet" call enable >> %logfile%
+wmic path win32_networkadapter where NetConnectionId="Ethernet" call enable >null
 echo """"""""""""""""""""""""
 echo "" Reinicio terminado ""
 echo """"""""""""""""""""""""
-echo Reinicio terminado %mydate% >> %logfile%
+echo .
+echo Reinicio realiza por: %username% Fecha: %Date% Hora: %time% >> C:\LogRNIC\log_reinicio.log
 pause
 goto EOF
 
 :ErrorL
-echo No se tienen permisos administrativos %date%-%time%-%username% > fail_%mydate%.log
+mkdir C:\LogRNIC >null
+cls
+echo %username% no tiene permisos administrativos. Ejecucion Fecha: %date% Hora: %time% >> C:\LogRNIC\fail_reinicio.log
+echo ==========================================================
+echo == Se requieren permisos administrativos, revisando.... ==
+echo ==========================================================
 echo .
 echo .
 echo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 echo !!!!!  No se tienen permisos, favor de ejecutar como administrador !!!!!!!!
 echo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+echo .
 echo .
 pause
 exit
