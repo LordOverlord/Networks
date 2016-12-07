@@ -30,7 +30,7 @@ goto EOF
 :ErrorL
 mkdir C:\LogRNIC >null
 cls
-echo %username% no tiene permisos administrativos. Ejecucion Fecha: %date% Hora: %time% >> C:\LogRNIC\fail_reinicio.log
+echo %username% no tiene permisos administrativos. Ejecucion Fecha: %date% Hora: %time% >> C:\LogRNIC\log_reinicio.log
 echo ==========================================================
 echo == Se requieren permisos administrativos, revisando.... ==
 echo ==========================================================
